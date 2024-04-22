@@ -3,4 +3,8 @@
     <string name="nombre_plato">Nombre plato</string>
     <string name="descripcion_plato">Descripción plato</string>
     <string name="precio_plato">Precio plato</string>
+    <string name="BtnIngresar">Ingresar</string>
+    <string name="texto_bienvenida">Bienvenido!</string>
+    <string name="Instruccion">Inicia sesión para continuar como administrador</string>
+    <string name="texto_olvidaste_contrasena">¿Olvidaste tu contraseña? Haz click aquí</string>
 </resources>
