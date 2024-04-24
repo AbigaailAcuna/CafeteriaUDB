@@ -1,0 +1,31 @@
+<!-- navigation_bar.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal"
+    android:background="@drawable/navbar_background">
+
+    <ImageButton
+        android:id="@+id/btnInicio"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_home"
+        android:background="?android:attr/selectableItemBackground"
+        android:scaleType="centerInside"
+        android:padding="8dp"
+        android:onClick="onInicioButtonClick"/>
+
+    <ImageButton
+        android:id="@+id/btnCuenta"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_cuenta"
+        android:background="?android:attr/selectableItemBackground"
+        android:scaleType="centerInside"
+        android:padding="8dp"
+        android:onClick="onCuentaButtonClick"/>
+
+
+</LinearLayout>

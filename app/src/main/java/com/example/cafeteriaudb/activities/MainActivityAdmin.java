@@ -1,4 +1,4 @@
-package com.example.cafeteriaudb;
+package com.example.cafeteriaudb.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.cafeteriaudb.R;
 import com.example.cafeteriaudb.adapters.MainAdapter;
 import com.example.cafeteriaudb.modelos.MainModel;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityAdmin extends AppCompatActivity {
 
     private RecyclerView desayunosRecyclerView, almuerzosRecyclerView, cenaRecyclerView;
     private TextView desayunosText, almuerzosText, cenaText;
@@ -29,12 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private List<MainModel> desayunosList, almuerzosList, cenaList;
     private MainAdapter desayunosAdapter, almuerzosAdapter, cenaAdapter;
 
-    TextView menu;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_admin);
 
         // Referencias a RecyclerViews y TextViews
         desayunosRecyclerView = findViewById(R.id.desayunosRecyclerView);
@@ -68,17 +67,6 @@ public class MainActivity extends AppCompatActivity {
         loadMenu("Desayunos", desayunosList, desayunosAdapter, desayunosText);
         loadMenu("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText);
         loadMenu("Cena", cenaList, cenaAdapter, cenaText);
-
-        menu = findViewById(R.id.menu);
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Iniciar LoginActivity cuando se haga clic en el botón
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     private void loadMenu(String category, List<MainModel> list, MainAdapter adapter, TextView textView) {
@@ -100,5 +88,18 @@ public class MainActivity extends AppCompatActivity {
                 // Manejar el error
             }
         });
+    }
+
+    public void onInicioButtonClick(View view) {
+        // Ya esta en pantalla inicio, no hace nada
+    }
+
+    public void onCuentaButtonClick(View view) {
+        // Abrir la actividad Historial
+        startActivity(new Intent(MainActivityAdmin.this, CuentaActivity.class));
+    }
+    public void onAgregarButtonClick(View view) {
+        // Abrir la actividad Historial
+        startActivity(new Intent(MainActivityAdmin.this, AgregarActivity.class));
     }
 }
