@@ -5,11 +5,11 @@ public class MainModel {
     String Imagen;
     String Plato;
     String Descripcion;
-    Double Precio;
+    String Precio;
 
     MainModel() {}
 
-    public MainModel(String imagen, String descripcion, String plato, Double precio) {
+    public MainModel(String imagen, String descripcion, String plato, String precio) {
         this.Imagen = imagen;
         this.Descripcion = descripcion;
         this.Plato = plato;
@@ -40,11 +40,11 @@ public class MainModel {
         Descripcion = descripcion;
     }
 
-    public Double getPrecio() {
+    public String getPrecio() {
         return Precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(String precio) {
         Precio = precio;
     }
 }
