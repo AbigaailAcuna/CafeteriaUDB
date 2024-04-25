@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.cafeteriaudb.R;
 import com.example.cafeteriaudb.adapters.MainAdapter;
+import com.example.cafeteriaudb.adapters.MainAdapterAdmin;
 import com.example.cafeteriaudb.modelos.MainModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +29,7 @@ public class MainActivityAdmin extends AppCompatActivity {
     private TextView desayunosText, almuerzosText, cenaText;
 
     private List<MainModel> desayunosList, almuerzosList, cenaList;
-    private MainAdapter desayunosAdapter, almuerzosAdapter, cenaAdapter;
+    private MainAdapterAdmin desayunosAdapter, almuerzosAdapter, cenaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +55,9 @@ public class MainActivityAdmin extends AppCompatActivity {
         cenaList = new ArrayList<>();
 
         // Inicialización de adaptadores
-        desayunosAdapter = new MainAdapter(desayunosList);
-        almuerzosAdapter = new MainAdapter(almuerzosList);
-        cenaAdapter = new MainAdapter(cenaList);
+        desayunosAdapter = new MainAdapterAdmin(desayunosList);
+        almuerzosAdapter = new MainAdapterAdmin(almuerzosList);
+        cenaAdapter = new MainAdapterAdmin(cenaList);
 
         // Configuración de adaptadores para RecyclerViews
         desayunosRecyclerView.setAdapter(desayunosAdapter);
@@ -69,7 +70,7 @@ public class MainActivityAdmin extends AppCompatActivity {
         loadMenu("Cena", cenaList, cenaAdapter, cenaText);
     }
 
-    private void loadMenu(String category, List<MainModel> list, MainAdapter adapter, TextView textView) {
+    private void loadMenu(String category, List<MainModel> list, MainAdapterAdmin adapter, TextView textView) {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
