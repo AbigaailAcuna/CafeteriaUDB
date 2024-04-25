@@ -56,8 +56,12 @@ public class MainActivityAdmin extends AppCompatActivity {
 
         // Inicialización de adaptadores
         desayunosAdapter = new MainAdapterAdmin(desayunosList);
+        desayunosAdapter.setCategory("Desayunos");
         almuerzosAdapter = new MainAdapterAdmin(almuerzosList);
+        almuerzosAdapter.setCategory("Almuerzos");
         cenaAdapter = new MainAdapterAdmin(cenaList);
+        cenaAdapter.setCategory("Cena");
+
 
         // Configuración de adaptadores para RecyclerViews
         desayunosRecyclerView.setAdapter(desayunosAdapter);
@@ -102,5 +106,5 @@ public class MainActivityAdmin extends AppCompatActivity {
     public void onAgregarButtonClick(View view) {
         // Abrir la actividad Historial
         startActivity(new Intent(MainActivityAdmin.this, AgregarActivity.class));
-    }
+}
 }

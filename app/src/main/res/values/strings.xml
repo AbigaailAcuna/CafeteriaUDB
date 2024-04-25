@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">CafeteriaUDB</string>
+    <string name="id_plato">Id plato</string>
+    <string name="dia_plato">Dia</string>
     <string name="nombre_plato">Nombre plato</string>
     <string name="descripcion_plato">Descripción plato</string>
     <string name="precio_plato">Precio plato</string>

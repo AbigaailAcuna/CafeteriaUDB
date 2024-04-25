@@ -7,13 +7,19 @@ public class MainModel {
     String Descripcion;
     String Precio;
 
+    String Dia;
+
+    String Id;
+
     MainModel() {}
 
-    public MainModel(String imagen, String descripcion, String plato, String precio) {
+    public MainModel(String id, String imagen, String descripcion, String plato, String precio, String dia) {
+        this.Id = id;
         this.Imagen = imagen;
         this.Descripcion = descripcion;
         this.Plato = plato;
         this.Precio = precio;
+        this.Dia = dia;
     }
 
     public String getImagen() {
@@ -36,6 +42,14 @@ public class MainModel {
         return Descripcion;
     }
 
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
+
     public void setDescripcion(String descripcion) {
         Descripcion = descripcion;
     }
@@ -44,7 +58,15 @@ public class MainModel {
         return Precio;
     }
 
-    public void setPrecio(String precio) {
-        Precio = precio;
+    public String getDia() {
+        return Dia;
     }
+
+    public void setDia(String dia) {
+        Dia = dia;
+    }
+
+    public void setPrecio(String precio) {
+        Precio =precio;
+}
 }

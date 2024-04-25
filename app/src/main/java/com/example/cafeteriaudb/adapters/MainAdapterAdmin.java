@@ -3,14 +3,17 @@ package com.example.cafeteriaudb.adapters;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +23,10 @@ import com.example.cafeteriaudb.activities.AgregarActivity;
 import com.example.cafeteriaudb.activities.EditarActivity;
 import com.example.cafeteriaudb.activities.MainActivityAdmin;
 import com.example.cafeteriaudb.modelos.MainModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,6 +34,7 @@ import java.util.List;
 public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyViewHolder> {
 
     private List<MainModel> mainModels;
+    public String category;
 
     public MainAdapterAdmin(List<MainModel> mainModels) {
         this.mainModels = mainModels;
@@ -49,7 +57,8 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                 .placeholder(com.firebase.ui.database.R.drawable.common_google_signin_btn_icon_dark_normal)
                 .error(com.firebase.ui.database.R.drawable.common_google_signin_btn_icon_dark_normal)
                 .into(holder.imageView);
-
+        holder.id.setText(model.getId());
+        holder.dia.setText(model.getDia());
         holder.plato.setText(model.getPlato());
         holder.descripcion.setText(model.getDescripcion());
         holder.precio.setText(model.getPrecio());
@@ -58,6 +67,7 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
         holder.btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Context context = v.getContext();
                 // Mostrar un AlertDialog con la información del platillo
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("Eliminar platillo");
@@ -66,7 +76,35 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                 builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // implementar la lógica para eliminar el platillo
+                        // Obtener la referencia del elemento en la base de datos
+
+
+                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference()
+                                .child("Menu")
+                                .child(category)
+                                .child(model.getId());
+                        DatabaseReference rootRef = dbRef.getRoot();
+                        Log.d("Root", rootRef.toString());
+                        String iddd= model.getId();
+                        Log.d("Categoria",category);
+                        Log.d("Id",iddd);
+                        Log.d("plato",dbRef.toString());
+                        // Eliminar el elemento de la base de datos
+                        dbRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    // Si se elimina correctamente de la base de datos, también elimina del RecyclerView
+                                    int position = mainModels.indexOf(model);
+                                    mainModels.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, mainModels.size());
+                                } else {
+                                    // Maneja el fallo
+                                    Toast.makeText(context, "Error al eliminar el platillo", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 });
 
@@ -90,26 +128,32 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                 v.getContext().startActivity(intent);
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
         return mainModels.size();
     }
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView plato, descripcion, precio;
+        TextView plato, descripcion, precio, id, dia;
         Button btnEliminar, btnEditar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            id = itemView.findViewById(R.id.IdTxt);
+            dia = itemView.findViewById(R.id.DiaTxt);
             imageView = itemView.findViewById(R.id.img);
             plato = itemView.findViewById(R.id.platoTxt);
             descripcion = itemView.findViewById(R.id.descripcionTxt);
             precio = itemView.findViewById(R.id.precioTxt);
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
             btnEditar = itemView.findViewById(R.id.btnEditar);
-        }
-    }
+ }
+}
 }

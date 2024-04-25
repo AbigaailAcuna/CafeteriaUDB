@@ -44,6 +44,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         holder.plato.setText(model.getPlato());
         holder.descripcion.setText(model.getDescripcion());
         holder.precio.setText(model.getPrecio());
+        holder.id.setText(model.getId());
+        holder.dia.setText(model.getDia());
     }
 
     @Override
@@ -53,14 +55,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView plato, descripcion, precio;
+        TextView id, dia, plato, descripcion, precio;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.img);
+            id = itemView.findViewById(R.id.IdTxt);
+            dia = itemView.findViewById(R.id.DiaTxt);
             plato = itemView.findViewById(R.id.platoTxt);
             descripcion = itemView.findViewById(R.id.descripcionTxt);
             precio = itemView.findViewById(R.id.precioTxt);
-        }
-    }
+ }
+}
 }

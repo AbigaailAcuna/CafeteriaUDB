@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,8 +19,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
         cenaRecyclerView.setAdapter(cenaAdapter);
 
         // Cargar datos de la base de datos
-        loadMenu("Desayunos", desayunosList, desayunosAdapter, desayunosText);
-        loadMenu("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText);
-        loadMenu("Cena", cenaList, cenaAdapter, cenaText);
+        loadMenuForToday("Desayunos", desayunosList, desayunosAdapter, desayunosText);
+        loadMenuForToday("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText);
+        loadMenuForToday("Cena", cenaList, cenaAdapter, cenaText);
 
         menu = findViewById(R.id.menu);
         menu.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadMenu(String category, List<MainModel> list, MainAdapter adapter, TextView textView) {
+
+    private void loadMenuForToday(String category, List<MainModel> list, MainAdapter adapter, TextView textView) {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -89,7 +94,10 @@ public class MainActivity extends AppCompatActivity {
                 list.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MainModel model = snapshot.getValue(MainModel.class);
-                    list.add(model);
+                    // Validar si el campo 'dia' del modelo coincide con el día actual
+                    if (isToday(model.getDia())) {
+                        list.add(model);
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 textView.setText(category); // Mostrar el texto indicando el tipo de comida
@@ -101,4 +109,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Método para verificar si un día coincide con el día actual
+    private boolean isToday(String dayFromDatabase) {
+        Calendar calendar = Calendar.getInstance();
+        String[] daysOfWeek = {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
+        int today = calendar.get(Calendar.DAY_OF_WEEK) - 1; // Restamos 1 porque en el arreglo el índice empieza en 0
+        String todayInSpanish = daysOfWeek[today];
+        Log.d("Hoy", "Hoy is: " + todayInSpanish);
+        Log.d("Dia en la base", "Dia segun la base es: " + dayFromDatabase);
+        return todayInSpanish.equalsIgnoreCase(dayFromDatabase);
+}
+
+
 }

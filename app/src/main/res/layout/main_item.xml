@@ -22,16 +22,45 @@
             />
 
         <TextView
-            android:id="@+id/platoTxt"
+            android:id="@+id/IdTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/img"
             android:fontFamily="@font/montserrat_medium"
+            android:text="@string/id_plato"
+            android:textColor="@color/azul"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/DiaTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/img"
+            android:layout_below="@id/IdTxt"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="@string/dia_plato"
+            android:textColor="@color/azul"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/platoTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/img"
+            android:layout_below="@id/DiaTxt"
+            android:fontFamily="@font/montserrat_medium"
             android:text="@string/nombre_plato"
             android:textColor="@color/azul"
-
             android:textSize="24sp"
             android:textStyle="bold" />
 
