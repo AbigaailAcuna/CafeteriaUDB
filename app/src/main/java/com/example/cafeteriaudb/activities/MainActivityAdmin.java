@@ -30,6 +30,7 @@ public class MainActivityAdmin extends AppCompatActivity {
 
     private List<MainModel> desayunosList, almuerzosList, cenaList;
     private MainAdapterAdmin desayunosAdapter, almuerzosAdapter, cenaAdapter;
+    private TextView nodesayunosText, noalmuerzosText, nocenaText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,9 @@ public class MainActivityAdmin extends AppCompatActivity {
         desayunosText = findViewById(R.id.desayunosText);
         almuerzosText = findViewById(R.id.almuerzosText);
         cenaText = findViewById(R.id.cenaText);
+        nodesayunosText = findViewById(R.id.nodesayunosText);
+        noalmuerzosText = findViewById(R.id.noalmuerzosText);
+        nocenaText = findViewById(R.id.nocenaText);
 
         // Configuración de layout para RecyclerViews
         desayunosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,23 +73,34 @@ public class MainActivityAdmin extends AppCompatActivity {
         cenaRecyclerView.setAdapter(cenaAdapter);
 
         // Cargar datos de la base de datos
-        loadMenu("Desayunos", desayunosList, desayunosAdapter, desayunosText);
-        loadMenu("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText);
-        loadMenu("Cena", cenaList, cenaAdapter, cenaText);
+        loadMenu("Desayunos", desayunosList, desayunosAdapter, desayunosText, nodesayunosText);
+        loadMenu("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText, noalmuerzosText);
+        loadMenu("Cena", cenaList, cenaAdapter, cenaText, nocenaText);
+
     }
 
-    private void loadMenu(String category, List<MainModel> list, MainAdapterAdmin adapter, TextView textView) {
+    private void loadMenu(String category, List<MainModel> list, MainAdapterAdmin adapter, TextView textView, TextView notextView) {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 list.clear();
+                boolean item = false;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MainModel model = snapshot.getValue(MainModel.class);
                     list.add(model);
+                    item = true;
                 }
                 adapter.notifyDataSetChanged();
-                textView.setText(category); // Mostrar el texto indicando el tipo de comida
+                if(!item){
+                    notextView.setVisibility(View.VISIBLE);
+                    notextView.setText("No se han agregado platos para "+ category);
+
+                }else{
+                    notextView.setVisibility(View.GONE);
+                    textView.setText(category); // Mostrar el texto indicando el tipo de comida
+                }
+
             }
 
             @Override

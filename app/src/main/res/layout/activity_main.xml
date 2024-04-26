@@ -41,6 +41,17 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/nodesayunosText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="18sp"
+                android:visibility="gone"/>
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/desayunosRecyclerView"
                 android:layout_width="match_parent"
@@ -57,6 +68,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/noalmuerzosText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/almuerzosRecyclerView"
                 android:layout_width="match_parent"
@@ -72,6 +94,17 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/nocenaText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cenaRecyclerView"

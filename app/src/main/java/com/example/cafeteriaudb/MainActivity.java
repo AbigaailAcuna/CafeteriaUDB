@@ -30,8 +30,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView desayunosRecyclerView, almuerzosRecyclerView, cenaRecyclerView;
     private TextView desayunosText, almuerzosText, cenaText;
 
+    private TextView nodesayunosText, noalmuerzosText, nocenaText;
+
     private List<MainModel> desayunosList, almuerzosList, cenaList;
     private MainAdapter desayunosAdapter, almuerzosAdapter, cenaAdapter;
+
 
     TextView menu;
 
@@ -47,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         desayunosText = findViewById(R.id.desayunosText);
         almuerzosText = findViewById(R.id.almuerzosText);
         cenaText = findViewById(R.id.cenaText);
+        nodesayunosText = findViewById(R.id.nodesayunosText);
+        noalmuerzosText = findViewById(R.id.noalmuerzosText);
+        nocenaText = findViewById(R.id.nocenaText);
+
 
         // Configuración de layout para RecyclerViews
         desayunosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         cenaRecyclerView.setAdapter(cenaAdapter);
 
         // Cargar datos de la base de datos
-        loadMenuForToday("Desayunos", desayunosList, desayunosAdapter, desayunosText);
-        loadMenuForToday("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText);
-        loadMenuForToday("Cena", cenaList, cenaAdapter, cenaText);
+        loadMenuForToday("Desayunos", desayunosList, desayunosAdapter, desayunosText, nodesayunosText);
+        loadMenuForToday("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText, noalmuerzosText);
+        loadMenuForToday("Cena", cenaList, cenaAdapter, cenaText, nocenaText);
 
         menu = findViewById(R.id.menu);
         menu.setOnClickListener(new View.OnClickListener() {
@@ -86,21 +93,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void loadMenuForToday(String category, List<MainModel> list, MainAdapter adapter, TextView textView) {
+    private void loadMenuForToday(String category, List<MainModel> list, MainAdapter adapter, TextView textView, TextView notextView) {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 list.clear();
+                boolean item = false;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MainModel model = snapshot.getValue(MainModel.class);
                     // Validar si el campo 'dia' del modelo coincide con el día actual
+
                     if (isToday(model.getDia())) {
                         list.add(model);
+                        item = true;
                     }
                 }
                 adapter.notifyDataSetChanged();
-                textView.setText(category); // Mostrar el texto indicando el tipo de comida
+                if(!item){
+                    notextView.setVisibility(View.VISIBLE);
+                   notextView.setText("Este día no contamos con "+ category);
+
+                }else{
+                    notextView.setVisibility(View.GONE);
+                    textView.setText(category); // Mostrar el texto indicando el tipo de comida
+                }
+
             }
 
             @Override
