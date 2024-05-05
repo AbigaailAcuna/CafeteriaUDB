@@ -9,12 +9,10 @@ public class MainModel {
 
     String Dia;
 
-    String Id;
 
     MainModel() {}
 
-    public MainModel(String id, String imagen, String descripcion, String plato, String precio, String dia) {
-        this.Id = id;
+    public MainModel( String imagen, String descripcion, String plato, String precio, String dia) {
         this.Imagen = imagen;
         this.Descripcion = descripcion;
         this.Plato = plato;
@@ -40,14 +38,6 @@ public class MainModel {
 
     public String getDescripcion() {
         return Descripcion;
-    }
-
-    public String getId() {
-        return Id;
-    }
-
-    public void setId(String id) {
-        Id = id;
     }
 
     public void setDescripcion(String descripcion) {

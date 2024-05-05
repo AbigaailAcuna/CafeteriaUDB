@@ -20,32 +20,6 @@
             android:src="@mipmap/ic_launcher"
             android:layout_centerVertical="true"
             />
-
-        <TextView
-            android:id="@+id/IdLbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/img"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="Id plato:"
-            android:textColor="@color/azul"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/IdTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/IdLbl"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="@string/id_plato"
-            android:textColor="@color/azul"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            />
         <TextView
             android:id="@+id/DiaLbl"
             android:layout_width="wrap_content"
@@ -53,7 +27,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/img"
-            android:layout_below="@id/IdLbl"
             android:fontFamily="@font/montserrat_medium"
             android:text="Dia:"
             android:textColor="@color/azul"
@@ -66,7 +39,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/DiaLbl"
-            android:layout_below="@id/IdTxt"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/dia_plato"
             android:textColor="@color/azul"

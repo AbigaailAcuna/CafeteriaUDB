@@ -25,8 +25,12 @@ import com.example.cafeteriaudb.activities.MainActivityAdmin;
 import com.example.cafeteriaudb.modelos.MainModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -57,7 +61,6 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                 .placeholder(com.firebase.ui.database.R.drawable.common_google_signin_btn_icon_dark_normal)
                 .error(com.firebase.ui.database.R.drawable.common_google_signin_btn_icon_dark_normal)
                 .into(holder.imageView);
-        holder.id.setText(model.getId());
         holder.dia.setText(model.getDia());
         holder.plato.setText(model.getPlato());
         holder.descripcion.setText(model.getDescripcion());
@@ -77,32 +80,39 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Obtener la referencia del elemento en la base de datos
-
-
                         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference()
                                 .child("Menu")
-                                .child(category)
-                                .child(model.getId());
-                        DatabaseReference rootRef = dbRef.getRoot();
-                        Log.d("Root", rootRef.toString());
-                        String iddd= model.getId();
-                        Log.d("Categoria",category);
-                        Log.d("Id",iddd);
-                        Log.d("plato",dbRef.toString());
-                        // Eliminar el elemento de la base de datos
-                        dbRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                .child(category);
+
+                        // Buscar el elemento en la base de datos por su contenido o posición
+                        Query query = dbRef.orderByChild("Plato").equalTo(model.getPlato());
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    // Si se elimina correctamente de la base de datos, también elimina del RecyclerView
-                                    int position = mainModels.indexOf(model);
-                                    mainModels.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, mainModels.size());
-                                } else {
-                                    // Maneja el fallo
-                                    Toast.makeText(context, "Error al eliminar el platillo", Toast.LENGTH_SHORT).show();
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                // Si se elimina correctamente de la base de datos, también elimina del RecyclerView
+                                                int position = mainModels.indexOf(model);
+                                                mainModels.remove(position);
+                                                notifyItemRemoved(position);
+                                                notifyItemRangeChanged(position, mainModels.size());
+                                                Toast.makeText(context, "Platillo eliminado", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                // Maneja el fallo
+                                                Toast.makeText(context, "Error al eliminar el platillo", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
                                 }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                // Maneja el fallo
+                                Toast.makeText(context, "Error al eliminar el platillo", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -111,12 +121,15 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                 builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                        // No hacer nada, simplemente cerrar el diálogo
                     }
                 });
 
-                builder.create().show();
+                // Mostrar el AlertDialog
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
+
         });
 
         holder.btnEditar.setOnClickListener(new View.OnClickListener() {
@@ -141,12 +154,11 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView plato, descripcion, precio, id, dia;
+        TextView plato, descripcion, precio, dia;
         Button btnEliminar, btnEditar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            id = itemView.findViewById(R.id.IdTxt);
             dia = itemView.findViewById(R.id.DiaTxt);
             imageView = itemView.findViewById(R.id.img);
             plato = itemView.findViewById(R.id.platoTxt);
