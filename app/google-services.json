@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "389329812648",
+    "firebase_url": "https://cafeteriaudb-fcfa9-default-rtdb.firebaseio.com",
+    "project_id": "cafeteriaudb-fcfa9",
+    "storage_bucket": "cafeteriaudb-fcfa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389329812648:android:6e4e2d4ae9a2a25131169d",
+        "android_client_info": {
+          "package_name": "com.example.cafeteriaudb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiCKsMDMTWlmsnAp2fgQ-9YRM7YUyMyCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389329812648:android:1362a1ae7c2eb92431169d",
+        "android_client_info": {
+          "package_name": "com.example.desafio2_dsm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiCKsMDMTWlmsnAp2fgQ-9YRM7YUyMyCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

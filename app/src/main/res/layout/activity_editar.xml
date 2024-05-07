@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EditarActivity">
+    <Button
+        android:id="@+id/btnRegresar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_back_arrow"
+        android:backgroundTint="@null"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/editar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Editar platillo"
+        android:textColor="@color/azul"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnRegresar"
+        app:layout_constraintTop_toTopOf="@+id/btnRegresar"
+        android:padding="16dp"/>
+
+    <Button
+        android:id="@+id/btnEditPlato"
+        android:layout_width="121dp"
+        android:layout_height="50dp"
+        android:text="Editar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.939" />
+
+    <ScrollView
+        android:layout_width="348dp"
+        android:layout_height="503dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.447">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/TituloPlatillo" />
+
+            <EditText
+                android:id="@+id/txtEditNombre"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5pt"
+                android:hint="NombrePlatillo"
+                android:inputType="text"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/DescripcionPlatillo" />
+
+            <EditText
+                android:id="@+id/txtEditDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5pt"
+                android:hint="DescripcionPlatillo"
+                android:inputType="text"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/DiaPlatillo" />
+
+            <EditText
+                android:id="@+id/txtEditDia"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5pt"
+                android:hint="DiaDisponible"
+                android:inputType="text"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/PrecioPlatillo" />
+
+            <EditText
+                android:id="@+id/txtEditPrecio"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5pt"
+                android:hint="PrecioPlatillo"
+                android:inputType="textEmailAddress"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/ImagenPlatillo" />
+
+            <EditText
+                android:id="@+id/txtEditImagen"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5pt"
+                android:hint="urlImagen"
+                android:inputType="none"
+                android:text="" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
