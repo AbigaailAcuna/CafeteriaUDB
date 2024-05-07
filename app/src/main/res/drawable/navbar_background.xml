@@ -1,0 +1,11 @@
+<!-- navbar_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/white" />
+    <padding
+        android:top="8dp"
+    android:right="0dp"
+    android:bottom="0dp"
+    android:left="0dp" />
+    <corners android:radius="0dp" />
+</shape>

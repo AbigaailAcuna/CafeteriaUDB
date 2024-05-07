@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">CafeteriaUDB</string>
-<<<<<<< Updated upstream
-=======
     <string name="id_plato">Id plato</string>
     <string name="dia_plato">Dia</string>
     <string name="nombre_plato">Nombre plato</string>
@@ -18,5 +16,4 @@
     <string name="ImagenPlatillo">Imagen del platillo:</string>
 
 
->>>>>>> Stashed changes
 </resources>

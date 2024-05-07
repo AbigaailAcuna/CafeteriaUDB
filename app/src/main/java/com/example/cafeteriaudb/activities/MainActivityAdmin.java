@@ -1,4 +1,4 @@
-package com.example.cafeteriaudb;
+package com.example.cafeteriaudb.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -6,11 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.cafeteriaudb.R;
 import com.example.cafeteriaudb.adapters.MainAdapter;
+import com.example.cafeteriaudb.adapters.MainAdapterAdmin;
 import com.example.cafeteriaudb.modelos.MainModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,29 +20,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityAdmin extends AppCompatActivity {
 
     private RecyclerView desayunosRecyclerView, almuerzosRecyclerView, cenaRecyclerView;
     private TextView desayunosText, almuerzosText, cenaText;
 
-    private TextView nodesayunosText, noalmuerzosText, nocenaText;
-
     private List<MainModel> desayunosList, almuerzosList, cenaList;
-    private MainAdapter desayunosAdapter, almuerzosAdapter, cenaAdapter;
-
-
-    TextView menu;
+    private MainAdapterAdmin desayunosAdapter, almuerzosAdapter, cenaAdapter;
+    private TextView nodesayunosText, noalmuerzosText, nocenaText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_admin);
 
         // Referencias a RecyclerViews y TextViews
         desayunosRecyclerView = findViewById(R.id.desayunosRecyclerView);
@@ -54,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         noalmuerzosText = findViewById(R.id.noalmuerzosText);
         nocenaText = findViewById(R.id.nocenaText);
 
-
         // Configuración de layout para RecyclerViews
         desayunosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         almuerzosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -66,9 +59,13 @@ public class MainActivity extends AppCompatActivity {
         cenaList = new ArrayList<>();
 
         // Inicialización de adaptadores
-        desayunosAdapter = new MainAdapter(desayunosList);
-        almuerzosAdapter = new MainAdapter(almuerzosList);
-        cenaAdapter = new MainAdapter(cenaList);
+        desayunosAdapter = new MainAdapterAdmin(desayunosList);
+        desayunosAdapter.setCategory("Desayunos");
+        almuerzosAdapter = new MainAdapterAdmin(almuerzosList);
+        almuerzosAdapter.setCategory("Almuerzos");
+        cenaAdapter = new MainAdapterAdmin(cenaList);
+        cenaAdapter.setCategory("Cena");
+
 
         // Configuración de adaptadores para RecyclerViews
         desayunosRecyclerView.setAdapter(desayunosAdapter);
@@ -76,24 +73,13 @@ public class MainActivity extends AppCompatActivity {
         cenaRecyclerView.setAdapter(cenaAdapter);
 
         // Cargar datos de la base de datos
-        loadMenuForToday("Desayunos", desayunosList, desayunosAdapter, desayunosText, nodesayunosText);
-        loadMenuForToday("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText, noalmuerzosText);
-        loadMenuForToday("Cena", cenaList, cenaAdapter, cenaText, nocenaText);
-
-        menu = findViewById(R.id.menu);
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Iniciar LoginActivity cuando se haga clic en el botón
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        loadMenu("Desayunos", desayunosList, desayunosAdapter, desayunosText, nodesayunosText);
+        loadMenu("Almuerzos", almuerzosList, almuerzosAdapter, almuerzosText, noalmuerzosText);
+        loadMenu("Cena", cenaList, cenaAdapter, cenaText, nocenaText);
 
     }
 
-
-    private void loadMenuForToday(String category, List<MainModel> list, MainAdapter adapter, TextView textView, TextView notextView) {
+    private void loadMenu(String category, List<MainModel> list, MainAdapterAdmin adapter, TextView textView, TextView notextView) {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -102,17 +88,13 @@ public class MainActivity extends AppCompatActivity {
                 boolean item = false;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MainModel model = snapshot.getValue(MainModel.class);
-                    // Validar si el campo 'dia' del modelo coincide con el día actual
-
-                    if (isToday(model.getDia())) {
-                        list.add(model);
-                        item = true;
-                    }
+                    list.add(model);
+                    item = true;
                 }
                 adapter.notifyDataSetChanged();
                 if(!item){
                     notextView.setVisibility(View.VISIBLE);
-                   notextView.setText("Este día no contamos con "+ category);
+                    notextView.setText("No se han agregado platos para "+ category);
 
                 }else{
                     notextView.setVisibility(View.GONE);
@@ -128,16 +110,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Método para verificar si un día coincide con el día actual
-    private boolean isToday(String dayFromDatabase) {
-        Calendar calendar = Calendar.getInstance();
-        String[] daysOfWeek = {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
-        int today = calendar.get(Calendar.DAY_OF_WEEK) - 1; // Restamos 1 porque en el arreglo el índice empieza en 0
-        String todayInSpanish = daysOfWeek[today];
-        Log.d("Hoy", "Hoy is: " + todayInSpanish);
-        Log.d("Dia en la base", "Dia segun la base es: " + dayFromDatabase);
-        return todayInSpanish.equalsIgnoreCase(dayFromDatabase);
+    public void onInicioButtonClick(View view) {
+        // Ya esta en pantalla inicio, no hace nada
+    }
+
+    public void onCuentaButtonClick(View view) {
+        // Abrir la actividad Historial
+        startActivity(new Intent(MainActivityAdmin.this, CuentaActivity.class));
+    }
+    public void onAgregarButtonClick(View view) {
+        // Abrir la actividad Historial
+        startActivity(new Intent(MainActivityAdmin.this, AgregarActivity.class));
 }
-
-
 }
