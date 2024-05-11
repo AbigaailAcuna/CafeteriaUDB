@@ -33,4 +33,149 @@
         app:layout_constraintTop_toTopOf="@+id/btnRegresar"
         android:padding="16dp"/>
 
+    <ImageView
+        android:id="@+id/imagev"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:srcCompat="@drawable/baseline_add_photo_alternate_24"
+        app:layout_constraintTop_toBottomOf="@+id/tvImage"
+        app:layout_constraintStart_toStartOf="@+id/tvImage" />
+
+    <TextView
+        android:id="@+id/tvnombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre:"
+        android:textColor="#FECF05"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.192"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.151" />
+
+    <EditText
+        android:id="@+id/txtnombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Nombre del plato"
+        android:textStyle=""
+        app:layout_constraintTop_toBottomOf="@+id/tvnombre"
+        app:layout_constraintStart_toStartOf="@+id/tvnombre"/>
+    <TextView
+        android:id="@+id/tvTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dia:"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#FECF05"
+        app:layout_constraintTop_toBottomOf="@+id/txtnombre"
+        app:layout_constraintStart_toStartOf="@+id/txtnombre"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/txtTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Tipo del plato"
+        android:textStyle=""
+        app:layout_constraintTop_toBottomOf="@+id/tvTipo"
+        app:layout_constraintStart_toStartOf="@+id/tvTipo" />
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción:"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#FECF05"
+        app:layout_constraintTop_toBottomOf="@+id/txtTipo"
+        app:layout_constraintStart_toStartOf="@+id/txtTipo"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/txtDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Tipo del Descipción"
+        android:textStyle=""
+        app:layout_constraintTop_toBottomOf="@+id/tvDescripcion"
+        app:layout_constraintStart_toStartOf="@+id/tvDescripcion" />
+
+    <TextView
+        android:id="@+id/tvPrecio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Precio:"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#FECF05"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescripcion"
+        app:layout_constraintStart_toStartOf="@+id/txtDescripcion"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/txtPrecio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Tipo del plato"
+        android:textStyle=""
+        app:layout_constraintTop_toBottomOf="@+id/tvPrecio"
+        app:layout_constraintStart_toStartOf="@+id/tvPrecio" />
+
+    <TextView
+        android:id="@+id/tvImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Image:"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#FECF05"
+        app:layout_constraintTop_toBottomOf="@+id/txtPrecio"
+        app:layout_constraintStart_toStartOf="@+id/txtPrecio"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Agregar"
+
+        app:layout_constraintStart_toEndOf="@+id/imagev"
+        app:layout_constraintLeft_toRightOf="@+id/imagev"
+        app:layout_constraintTop_toTopOf="@id/imagev"/>
+
+    <Button
+        android:id="@+id/btnshow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mostrar Imagenes"
+        app:layout_constraintTop_toBottomOf="@+id/btnAdd"
+        app:layout_constraintStart_toStartOf="@+id/btnAdd"
+
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.865"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.77" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,9 @@ public class MainModel {
     String Dia;
 
 
-    MainModel() {}
+    MainModel() {
+
+    }
 
     public MainModel( String imagen, String descripcion, String plato, String precio, String dia) {
         this.Imagen = imagen;
