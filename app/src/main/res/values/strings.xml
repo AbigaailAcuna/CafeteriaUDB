@@ -9,4 +9,6 @@
     <string name="texto_bienvenida">Bienvenido!</string>
     <string name="Instruccion">Inicia sesión para continuar como administrador</string>
     <string name="texto_olvidaste_contrasena">¿Olvidaste tu contraseña? Haz click aquí</string>
+
+
 </resources>

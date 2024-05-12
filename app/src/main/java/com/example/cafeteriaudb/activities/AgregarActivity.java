@@ -4,15 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
@@ -33,15 +36,23 @@ import java.util.Map;
 public class AgregarActivity extends AppCompatActivity {
 
     Button btnRegresar;
-    EditText descripcion,plato,precio,dia;
+    private Spinner spinner1,dia;
+    EditText descripcion,plato,precio;
     private Button btnAdd, btnshow;
     private  ProgressBar progressBar;
     private ImageView imageView;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("Menu").child("Almuerzos");
+    private DatabaseReference root1 = FirebaseDatabase.getInstance().getReference().child("Menu").child("Cena");
+    private DatabaseReference root2 = FirebaseDatabase.getInstance().getReference().child("Menu").child("Desayunos");
+
+
     private StorageReference reference = FirebaseStorage.getInstance().getReference();
 
     private Uri imageUri;
 
+
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +60,20 @@ public class AgregarActivity extends AppCompatActivity {
 
         btnRegresar = findViewById(R.id.btnRegresar);
         btnAdd = findViewById(R.id.btnAdd);
-        btnshow = findViewById(R.id.btnshow);
         imageView = findViewById(R.id.imagev);
         progressBar = findViewById(R.id.progressBar1);
         descripcion = (EditText)findViewById(R.id.txtDescripcion);
+        spinner1 =(Spinner)findViewById(R.id.spinnerTipo);
         plato = (EditText)findViewById(R.id.txtnombre);
         precio = (EditText)findViewById(R.id.txtPrecio);
-        dia = (EditText)findViewById(R.id.txtTipo);
+        dia = (Spinner)findViewById(R.id.spinnerDia);
+        String [] opciones = {"Almuerzos","Cena","Desayunos"};
+        String [] opciones1 = {"Lunes","Martes","Miercoles","Jueves","Viernes","sabado"};
 
+        ArrayAdapter <String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,opciones);
+        spinner1.setAdapter(adapter);
+        ArrayAdapter <String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,opciones1);
+        dia.setAdapter(adapter1);
         progressBar.setVisibility(View.INVISIBLE);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +95,7 @@ public class AgregarActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         btnRegresar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,23 +121,42 @@ public class AgregarActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+                    String selection = spinner1.getSelectedItem().toString();
+                    String selection1 = dia.getSelectedItem().toString();
+
+
                     @Override
                     public void onSuccess(Uri uri) {
+                        if(selection.equals("Almuerzos")){
+                            MainModel model= new MainModel(uri.toString(),descripcion.getText().toString(),plato.getText().toString(),precio.getText().toString(),dia.getSelectedItem().toString());
 
+                            String modelId = root.push().getKey();
+                            root.child(modelId).setValue(model);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AgregarActivity.this,"selecciono almuerzos", Toast.LENGTH_SHORT).show();
+                        }else if(selection.equals("Cena")){
 
-                        Map<String, Object> platilloMap = new HashMap<>();
-                        platilloMap.put("Imagen",uri.toString());
-                        platilloMap.put("Descripcion",descripcion.getText().toString());
-                        platilloMap.put("Plato",plato.getText().toString());
-                        platilloMap.put("Precio",precio.getText().toString());
-                        platilloMap.put("Dia",dia.getText().toString());
+                            MainModel model= new MainModel(uri.toString(),descripcion.getText().toString(),plato.getText().toString(),precio.getText().toString(),dia.getSelectedItem().toString());
 
-                        MainModel model= new MainModel(uri.toString(),descripcion.getText().toString(),plato.getText().toString(),precio.getText().toString(),dia.getText().toString());
+                            String modelId = root.push().getKey();
+                            root1.child(modelId).setValue(model);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AgregarActivity.this,"selecciono Cena", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(selection.equals("Desayunos")){
 
-                        String modelId = root.push().getKey();
-                        root.child(modelId).setValue(model);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
+                            MainModel model= new MainModel(uri.toString(),descripcion.getText().toString(),plato.getText().toString(),precio.getText().toString(),dia.getSelectedItem().toString());
+
+                            String modelId = root.push().getKey();
+                            root2.child(modelId).setValue(model);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AgregarActivity.this,"selecciono Desayuno", Toast.LENGTH_SHORT).show();
+                        };
+
                     }
                 });
             }
@@ -142,4 +179,6 @@ public class AgregarActivity extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(mUri));
     }
+
+
 }

@@ -33,6 +33,8 @@
         app:layout_constraintTop_toTopOf="@+id/btnRegresar"
         android:padding="16dp"/>
 
+
+
     <ImageView
         android:id="@+id/imagev"
         android:layout_width="120dp"
@@ -62,32 +64,32 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="Nombre del plato"
+        android:hint="Nombre del plato"
         android:textStyle=""
         app:layout_constraintTop_toBottomOf="@+id/tvnombre"
         app:layout_constraintStart_toStartOf="@+id/tvnombre"/>
     <TextView
-        android:id="@+id/tvTipo"
+        android:id="@+id/tvDia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dia:"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#FECF05"
-        app:layout_constraintTop_toBottomOf="@+id/txtnombre"
-        app:layout_constraintStart_toStartOf="@+id/txtnombre"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipo"
+        app:layout_constraintStart_toStartOf="@+id/spinnerTipo"
         android:layout_marginTop="20dp"/>
 
-    <EditText
-        android:id="@+id/txtTipo"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/spinnerDia"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Tipo del plato"
-        android:textStyle=""
-        app:layout_constraintTop_toBottomOf="@+id/tvTipo"
-        app:layout_constraintStart_toStartOf="@+id/tvTipo" />
+
+        app:layout_constraintTop_toBottomOf="@+id/tvDia"
+        app:layout_constraintStart_toStartOf="@+id/tvDia"
+
+        />
+
     <TextView
         android:id="@+id/tvDescripcion"
         android:layout_width="wrap_content"
@@ -96,8 +98,8 @@
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#FECF05"
-        app:layout_constraintTop_toBottomOf="@+id/txtTipo"
-        app:layout_constraintStart_toStartOf="@+id/txtTipo"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDia"
+        app:layout_constraintStart_toStartOf="@+id/spinnerDia"
         android:layout_marginTop="20dp"/>
 
     <EditText
@@ -106,7 +108,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="Tipo del Descipción"
+        android:hint="Descripcion del platillo"
         android:textStyle=""
         app:layout_constraintTop_toBottomOf="@+id/tvDescripcion"
         app:layout_constraintStart_toStartOf="@+id/tvDescripcion" />
@@ -129,7 +131,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="Tipo del plato"
+        android:hint="Precio"
         android:textStyle=""
         app:layout_constraintTop_toBottomOf="@+id/tvPrecio"
         app:layout_constraintStart_toStartOf="@+id/tvPrecio" />
@@ -146,25 +148,20 @@
         app:layout_constraintStart_toStartOf="@+id/txtPrecio"
         android:layout_marginTop="20dp"/>
 
+
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
         android:text="Agregar"
-
-        app:layout_constraintStart_toEndOf="@+id/imagev"
+        android:padding="20dp"
+        android:textColor="#FFBC00"
+        android:background="#031A3B"
         app:layout_constraintLeft_toRightOf="@+id/imagev"
-        app:layout_constraintTop_toTopOf="@id/imagev"/>
-
-    <Button
-        android:id="@+id/btnshow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mostrar Imagenes"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd"
-        app:layout_constraintStart_toStartOf="@+id/btnAdd"
-
-        />
+        app:layout_constraintStart_toEndOf="@+id/imagev"
+        app:layout_constraintTop_toTopOf="@id/imagev" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
@@ -173,9 +170,31 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.865"
+        app:layout_constraintHorizontal_bias="0.589"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.77" />
+        app:layout_constraintVertical_bias="0.756" />
+
+    <TextView
+        android:id="@+id/tvTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo:"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#FECF05"
+        app:layout_constraintTop_toBottomOf="@+id/txtnombre"
+        app:layout_constraintStart_toStartOf="@+id/txtnombre"
+        android:layout_marginTop="20dp"/>
+    <Spinner
+        android:id="@+id/spinnerTipo"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="fs"
+        app:layout_constraintTop_toBottomOf="@+id/tvTipo"
+        app:layout_constraintStart_toStartOf="@+id/tvTipo"
+
+
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
