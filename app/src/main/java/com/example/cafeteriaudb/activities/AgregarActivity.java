@@ -4,10 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.cafeteriaudb.R;
 import com.example.cafeteriaudb.modelos.MainModel;
@@ -29,7 +39,7 @@ public class AgregarActivity extends AppCompatActivity {
     private Spinner spinner1,dia;
     EditText descripcion,plato,precio;
     private Button btnAdd, btnshow;
-    private  ProgressBar progressBar;
+    private ProgressBar progressBar;
     private ImageView imageView;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("Menu").child("Almuerzos");
     private DatabaseReference root1 = FirebaseDatabase.getInstance().getReference().child("Menu").child("Cena");
@@ -59,7 +69,7 @@ public class AgregarActivity extends AppCompatActivity {
         String [] opciones = {"Almuerzos","Cena","Desayunos"};
         String [] opciones1 = {"Lunes","Martes","Miercoles","Jueves","Viernes","sabado"};
 
-        ArrayAdapter <String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,opciones);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,opciones);
         spinner1.setAdapter(adapter);
         ArrayAdapter <String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,opciones1);
         dia.setAdapter(adapter1);

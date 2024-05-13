@@ -1,13 +1,18 @@
 package com.example.cafeteriaudb.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.cafeteriaudb.R;
 import com.google.firebase.database.DataSnapshot;
@@ -16,96 +21,122 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class EditarActivity extends AppCompatActivity {
     public String category;
 
-    private EditText editNombre;
-    private EditText editDescripcion;
-    private EditText editDia;
-    private EditText editPrecio;
-    private EditText editImagen;
-    private Button btneditPlato;
+    private EditText editNombre, editDescripcion, editDia, editPrecio;
+    private ImageView editImagen;
+    private Button btneditPlato, btnRegresar;
+    private Uri imageUri;
 
-    Button btnRegresar;
+    private StorageReference reference = FirebaseStorage.getInstance().getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar);
 
-        Bundle extras = getIntent().getExtras();
-        btneditPlato=findViewById(R.id.btnEditPlato);
-        btnRegresar=findViewById(R.id.btnRegresar);
+        initializeUI();
 
-        String nombrePlato = "";
-
-        if (extras != null) {
-             nombrePlato = extras.getString("nombrePlato");
-            String descripcionPlato = extras.getString("descripcionPlato");
-            String precioPlato = extras.getString("precioPlato");
-            String diaPlato = extras.getString("diaPlato");
-            String imagenPlato = extras.getString("imagenPlato");
-            category = extras.getString("categoria");
-
-            editNombre=findViewById(R.id.txtEditNombre);
-            editDescripcion=findViewById(R.id.txtEditDescripcion);
-            editDia=findViewById(R.id.txtEditDia);
-            editPrecio=findViewById(R.id.txtEditPrecio);
-            editImagen=findViewById(R.id.txtEditImagen);
-            editNombre.setText(nombrePlato);
-            editDescripcion.setText(descripcionPlato);
-            editDia.setText(diaPlato);
-            editPrecio.setText(precioPlato);
-            editImagen.setText(imagenPlato);
-
+        if (getIntent().hasExtra("nombrePlato")) {
+            loadPlatoData();
         }
 
-        final String nombrePlatoFinal = nombrePlato; // Variable final para usar dentro del listener
+        btnRegresar.setOnClickListener(v -> startActivity(new Intent(EditarActivity.this, MainActivityAdmin.class)));
 
-        btnRegresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(EditarActivity.this,MainActivityAdmin.class));
-            }
+        btneditPlato.setOnClickListener(v -> updatePlatoInfo());
+    }
+
+    private void initializeUI() {
+        btneditPlato = findViewById(R.id.btnEditPlato);
+        btnRegresar = findViewById(R.id.btnRegresar);
+        editNombre = findViewById(R.id.txtEditNombre);
+        editDescripcion = findViewById(R.id.txtEditDescripcion);
+        editDia = findViewById(R.id.txtEditDia);
+        editPrecio = findViewById(R.id.txtEditPrecio);
+        editImagen = findViewById(R.id.imagev);
+
+        editImagen.setOnClickListener(v -> {
+            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            galleryIntent.setType("image/*");
+            startActivityForResult(galleryIntent, 2);
         });
+    }
 
-        btneditPlato.setOnClickListener(new View.OnClickListener() {
+    private void loadPlatoData() {
+        Bundle extras = getIntent().getExtras();
+        String nombrePlato = extras.getString("nombrePlato");
+        String descripcionPlato = extras.getString("descripcionPlato");
+        String precioPlato = extras.getString("precioPlato");
+        String diaPlato = extras.getString("diaPlato");
+        category = extras.getString("categoria");
+
+        editNombre.setText(nombrePlato);
+        editDescripcion.setText(descripcionPlato);
+        editDia.setText(diaPlato);
+        editPrecio.setText(precioPlato);
+    }
+
+    private void updatePlatoInfo() {
+        String nombrePlatoOriginal = getIntent().getStringExtra("nombrePlato");
+        String nuevoNombre = editNombre.getText().toString();
+        String nuevaDescripcion = editDescripcion.getText().toString();
+        String nuevoDia = editDia.getText().toString();
+        String nuevoPrecio = editPrecio.getText().toString();
+
+        if (imageUri != null) {
+            StorageReference fileRef = reference.child("images/" + System.currentTimeMillis() + "." + getFileExtension(imageUri));
+            fileRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl()
+                            .addOnSuccessListener(uri -> updateDatabase(nombrePlatoOriginal, nuevoNombre, nuevaDescripcion, nuevoDia, nuevoPrecio, uri.toString()))
+                            .addOnFailureListener(e -> Toast.makeText(EditarActivity.this, "Error al obtener la URL de la imagen", Toast.LENGTH_SHORT).show()))
+                    .addOnFailureListener(e -> Toast.makeText(EditarActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show());
+        } else {
+            updateDatabase(nombrePlatoOriginal, nuevoNombre, nuevaDescripcion, nuevoDia, nuevoPrecio, null);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            editImagen.setImageURI(imageUri);
+        }
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    private void updateDatabase(String nombrePlatoOriginal, String nuevoNombre, String nuevaDescripcion, String nuevoDia, String nuevoPrecio, String imageUrl) {
+        DatabaseReference menuRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
+        Query query = menuRef.orderByChild("plato").equalTo(nombrePlatoOriginal);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                final String nuevoNombre = editNombre.getText().toString();
-                final String nuevaDescripcion = editDescripcion.getText().toString();
-                final String nuevoDia = editDia.getText().toString();
-                final String nuevoPrecio = editPrecio.getText().toString();
-                final String nuevaImagen = editImagen.getText().toString();
-
-                // Buscar el platillo por su nombre actual en Firebase
-                DatabaseReference menuRef = FirebaseDatabase.getInstance().getReference()
-                        .child("Menu")
-                        .child(category);
-                Query query = menuRef.orderByChild("Plato").equalTo(nombrePlatoFinal);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            // Obtener la referencia y actualizar
-                            DatabaseReference platilloRef = snapshot.getRef();
-                            platilloRef.child("Plato").setValue(nuevoNombre);
-                            platilloRef.child("Descripcion").setValue(nuevaDescripcion);
-                            platilloRef.child("Precio").setValue(nuevoPrecio);
-                            platilloRef.child("Dia").setValue(nuevoDia);
-                            platilloRef.child("Imagen").setValue(nuevaImagen);
-
-                            // Mostrar mensaje y regresar
-                            Toast.makeText(EditarActivity.this, "Platillo actualizado", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(EditarActivity.this, MainActivityAdmin.class));
-                        }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DatabaseReference platilloRef = snapshot.getRef();
+                    platilloRef.child("plato").setValue(nuevoNombre);
+                    platilloRef.child("descripcion").setValue(nuevaDescripcion);
+                    platilloRef.child("precio").setValue(nuevoPrecio);
+                    platilloRef.child("dia").setValue(nuevoDia);
+                    if (imageUrl != null) {
+                        platilloRef.child("imagen").setValue(imageUrl);
                     }
+                    Toast.makeText(EditarActivity.this, "Platillo actualizado", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(EditarActivity.this, MainActivityAdmin.class));
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(EditarActivity.this, "Error al actualizar el platillo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(EditarActivity.this, "Error al actualizar el platillo", Toast.LENGTH_SHORT).show();
             }
         });
     }

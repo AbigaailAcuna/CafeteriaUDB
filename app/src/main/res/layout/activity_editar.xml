@@ -124,20 +124,19 @@
                 android:text="" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/tvImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10pt"
                 android:text="@string/ImagenPlatillo" />
 
-            <EditText
-                android:id="@+id/txtEditImagen"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="5pt"
-                android:hint="urlImagen"
-                android:inputType="none"
-                android:text="" />
+            <ImageView
+                android:id="@+id/imagev"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:srcCompat="@drawable/baseline_add_photo_alternate_24"
+                app:layout_constraintTop_toBottomOf="@+id/tvImage"
+                app:layout_constraintStart_toStartOf="@+id/tvImage" />
 
         </LinearLayout>
     </ScrollView>

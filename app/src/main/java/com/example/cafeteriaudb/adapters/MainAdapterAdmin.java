@@ -85,7 +85,7 @@ public class MainAdapterAdmin extends RecyclerView.Adapter<MainAdapterAdmin.MyVi
                                 .child(category);
 
                         // Buscar el elemento en la base de datos por su contenido o posición
-                        Query query = dbRef.orderByChild("Plato").equalTo(model.getPlato());
+                        Query query = dbRef.orderByChild("plato").equalTo(model.getPlato());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
