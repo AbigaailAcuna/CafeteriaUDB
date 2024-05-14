@@ -27,7 +27,7 @@ import com.google.firebase.storage.StorageReference;
 public class EditarActivity extends AppCompatActivity {
     public String category;
 
-    private EditText editNombre, editDescripcion, editDia, editPrecio;
+    private EditText editNombre, editDescripcion, editDia, editPrecio, editCategoria;
     private ImageView editImagen;
     private Button btneditPlato, btnRegresar;
     private Uri imageUri;
@@ -58,6 +58,7 @@ public class EditarActivity extends AppCompatActivity {
         editDia = findViewById(R.id.txtEditDia);
         editPrecio = findViewById(R.id.txtEditPrecio);
         editImagen = findViewById(R.id.imagev);
+        editCategoria = findViewById(R.id.txtEditCategoria);
 
         editImagen.setOnClickListener(v -> {
             Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -78,6 +79,8 @@ public class EditarActivity extends AppCompatActivity {
         editDescripcion.setText(descripcionPlato);
         editDia.setText(diaPlato);
         editPrecio.setText(precioPlato);
+        editCategoria.setText(extras.getString("categoria"));
+
     }
 
     private void updatePlatoInfo() {
@@ -86,16 +89,17 @@ public class EditarActivity extends AppCompatActivity {
         String nuevaDescripcion = editDescripcion.getText().toString();
         String nuevoDia = editDia.getText().toString();
         String nuevoPrecio = editPrecio.getText().toString();
+        String nuevaCategoria = editCategoria.getText().toString();
 
         if (imageUri != null) {
             StorageReference fileRef = reference.child("images/" + System.currentTimeMillis() + "." + getFileExtension(imageUri));
             fileRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl()
-                            .addOnSuccessListener(uri -> updateDatabase(nombrePlatoOriginal, nuevoNombre, nuevaDescripcion, nuevoDia, nuevoPrecio, uri.toString()))
+                            .addOnSuccessListener(uri -> updateDatabase(nombrePlatoOriginal, nuevoNombre, nuevaDescripcion, nuevoDia, nuevoPrecio,nuevaCategoria, uri.toString()))
                             .addOnFailureListener(e -> Toast.makeText(EditarActivity.this, "Error al obtener la URL de la imagen", Toast.LENGTH_SHORT).show()))
                     .addOnFailureListener(e -> Toast.makeText(EditarActivity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show());
         } else {
-            updateDatabase(nombrePlatoOriginal, nuevoNombre, nuevaDescripcion, nuevoDia, nuevoPrecio, null);
+            updateDatabase(nombrePlatoOriginal, nuevoNombre, nuevaDescripcion, nuevoDia, nuevoPrecio, nuevaCategoria, null);
         }
     }
 
@@ -114,24 +118,38 @@ public class EditarActivity extends AppCompatActivity {
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private void updateDatabase(String nombrePlatoOriginal, String nuevoNombre, String nuevaDescripcion, String nuevoDia, String nuevoPrecio, String imageUrl) {
-        DatabaseReference menuRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
-        Query query = menuRef.orderByChild("plato").equalTo(nombrePlatoOriginal);
+    private void updateDatabase(String nombrePlatoOriginal, String nuevoNombre, String nuevaDescripcion, String nuevoDia, String nuevoPrecio, String nuevaCategoria, String imageUrl) {
+        DatabaseReference oldMenuRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(category);
+        DatabaseReference newMenuRef = FirebaseDatabase.getInstance().getReference().child("Menu").child(nuevaCategoria);
+
+        Query query = oldMenuRef.orderByChild("plato").equalTo(nombrePlatoOriginal);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DatabaseReference platilloRef = snapshot.getRef();
-                    platilloRef.child("plato").setValue(nuevoNombre);
-                    platilloRef.child("descripcion").setValue(nuevaDescripcion);
-                    platilloRef.child("precio").setValue(nuevoPrecio);
-                    platilloRef.child("dia").setValue(nuevoDia);
-                    if (imageUrl != null) {
-                        platilloRef.child("imagen").setValue(imageUrl);
+                    if (!category.equals(nuevaCategoria)) {
+                        snapshot.getRef().removeValue(); // Remove from old category
+                        DatabaseReference newPlatilloRef = newMenuRef.push(); // Add to new category
+                        newPlatilloRef.setValue(snapshot.getValue(), (databaseError, databaseReference) -> {
+                            if (databaseError != null) {
+                                Toast.makeText(EditarActivity.this, "Error al mover el platillo", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EditarActivity.this, "Platillo movido y actualizado", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        // Update fields in the existing category
+                        snapshot.getRef().child("plato").setValue(nuevoNombre);
+                        snapshot.getRef().child("descripcion").setValue(nuevaDescripcion);
+                        snapshot.getRef().child("precio").setValue(nuevoPrecio);
+                        snapshot.getRef().child("dia").setValue(nuevoDia);
+                        if (imageUrl != null) {
+                            snapshot.getRef().child("imagen").setValue(imageUrl);
+                        }
+                        Toast.makeText(EditarActivity.this, "Platillo actualizado", Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(EditarActivity.this, "Platillo actualizado", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(EditarActivity.this, MainActivityAdmin.class));
                 }
+                startActivity(new Intent(EditarActivity.this, MainActivityAdmin.class));
             }
 
             @Override
@@ -140,4 +158,5 @@ public class EditarActivity extends AppCompatActivity {
             }
         });
     }
+
 }

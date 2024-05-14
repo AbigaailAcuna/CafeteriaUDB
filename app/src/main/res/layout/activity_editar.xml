@@ -92,6 +92,21 @@
                 android:text="" />
 
             <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10pt"
+                android:text="@string/CategoriaPlatillo" />
+            <EditText
+                android:id="@+id/txtEditCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5pt"
+                android:hint="CategoriaPlatillo"
+                android:inputType="text"
+                android:text="" />
+
+            <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
