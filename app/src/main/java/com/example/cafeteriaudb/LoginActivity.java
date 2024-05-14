@@ -1,16 +1,17 @@
 package com.example.cafeteriaudb;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cafeteriaudb.activities.MainActivityAdmin;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,11 +26,14 @@ public class LoginActivity extends AppCompatActivity {
     EditText input_correo;
     EditText input_contrasena;
     Button BtnIngresar;
+    Button btnMostrarContrasena; // Botón para mostrar/ocultar contraseña
 
     FirebaseAuth firebaseAuth;
 
-    String correo = " ";
-    String contrasena = " ";
+    String correo = "";
+    String contrasena = "";
+
+    boolean isPasswordVisible = false; // variable para rastrear si la contraseña es visible o no
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         input_correo = findViewById(R.id.input_correo);
         input_contrasena = findViewById(R.id.input_contrasena);
         BtnIngresar = findViewById(R.id.BtnIngresar);
+        btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
+        btnMostrarContrasena.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye, 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -48,13 +54,32 @@ public class LoginActivity extends AppCompatActivity {
                 validar();
             }
         });
+
+        btnMostrarContrasena.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglePasswordVisibility();
+            }
+        });
+    }
+
+    private void togglePasswordVisibility() {
+        if (!isPasswordVisible) {
+            // Si la contraseña está oculta, hacerla visible
+            input_contrasena.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            btnMostrarContrasena.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eyeslash, 0);
+        } else {
+            // Si la contraseña es visible, ocultarla
+            input_contrasena.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            btnMostrarContrasena.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye, 0);
+        }
+        isPasswordVisible = !isPasswordVisible;
     }
 
     private void validar(){
-
         //validamos campos vacíos
-        correo = input_correo.getText().toString();
-        contrasena = input_contrasena.getText().toString();
+        correo = input_correo.getText().toString().trim();
+        contrasena = input_contrasena.getText().toString().trim();
 
         if(TextUtils.isEmpty(correo) || TextUtils.isEmpty(contrasena)){
             Toast.makeText(this, "Ingrese los campos", Toast.LENGTH_SHORT).show();
@@ -65,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         else {
             Login();
         }
-
     }
 
     private void Login() {

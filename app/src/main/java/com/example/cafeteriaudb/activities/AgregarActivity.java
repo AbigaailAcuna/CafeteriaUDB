@@ -134,8 +134,8 @@ public class AgregarActivity extends AppCompatActivity {
                             String modelId = root.push().getKey();
                             root.child(modelId).setValue(model);
                             progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
-                            Toast.makeText(AgregarActivity.this,"selecciono almuerzos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AgregarActivity.this,"Almuerzo agregado correctamente",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AgregarActivity.this,MainActivityAdmin.class));
                         }else if(selection.equals("Cena")){
 
                             MainModel model= new MainModel(uri.toString(),descripcion.getText().toString(),plato.getText().toString(),precio.getText().toString(),dia.getSelectedItem().toString());
@@ -143,8 +143,8 @@ public class AgregarActivity extends AppCompatActivity {
                             String modelId = root.push().getKey();
                             root1.child(modelId).setValue(model);
                             progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
-                            Toast.makeText(AgregarActivity.this,"selecciono Cena", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AgregarActivity.this,"Cena agregada correctamente",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AgregarActivity.this,MainActivityAdmin.class));
                         }
                         else if(selection.equals("Desayunos")){
 
@@ -153,8 +153,8 @@ public class AgregarActivity extends AppCompatActivity {
                             String modelId = root.push().getKey();
                             root2.child(modelId).setValue(model);
                             progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(AgregarActivity.this,"Platillo agregado correctamente",Toast.LENGTH_SHORT).show();
-                            Toast.makeText(AgregarActivity.this,"selecciono Desayuno", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AgregarActivity.this,"Desayuno agregado correctamente",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AgregarActivity.this,MainActivityAdmin.class));
                         };
 
                     }

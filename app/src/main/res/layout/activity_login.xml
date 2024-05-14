@@ -7,17 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:padding="48dp">
 
         <TextView
             android:id="@+id/texto_bienvenida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
             android:text="@string/texto_bienvenida"
             android:paddingBottom="30dp"
             android:textSize="30dp"
@@ -29,7 +28,8 @@
             android:id="@+id/texto_instruccion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/texto_bienvenida"
+            android:layout_centerHorizontal="true"
             android:text="@string/Instruccion"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -41,43 +41,40 @@
             android:id="@+id/input_correo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/texto_instruccion"
             android:hint="Correo electrónico"
             android:inputType="textEmailAddress"
-            android:layout_gravity="center_horizontal"
             android:drawableStart="@drawable/ic_email"
             android:drawablePadding="10dp"
             android:paddingBottom="25dp"
             android:layout_marginBottom="30dp"
             />
 
-
-
         <EditText
             android:id="@+id/input_contrasena"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:layout_gravity="center_horizontal"
-            android:drawableStart="@drawable/ic_password"
-            android:drawablePadding="10dp"
-            android:paddingBottom="25dp"
-            android:layout_marginBottom="30dp"
-            />
+            android:layout_below="@id/input_correo"
+            android:layout_alignStart="@id/input_correo"
+        android:layout_alignEnd="@id/input_correo"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:drawableStart="@drawable/ic_password"
+        android:drawablePadding="10dp"
+        android:paddingBottom="25dp"
+        android:layout_marginBottom="30dp"
+        />
 
-        <TextView
-            android:id="@+id/texto_olvidaste_contrasena"
+        <Button
+            android:id="@+id/btnMostrarContrasena"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:text="@string/texto_olvidaste_contrasena"
-            android:textAllCaps="false"
-            android:textColor="@color/darkblue"
-            android:textStyle="normal"
-            android:textSize="14sp"
-            android:layout_marginBottom="35dp"
-            />
+            android:layout_below="@id/input_correo"
+            android:layout_toEndOf="@id/input_contrasena"
+            style="@style/ButtonNoBackground"
+        android:layout_marginStart="-70dp"
+        android:layout_marginEnd="20dp"
+        />
 
         <Button
             android:id="@+id/BtnIngresar"
@@ -88,12 +85,11 @@
             android:background="@color/darkblue"
             android:layout_marginTop="20dp"
             android:textStyle="normal"
+            android:layout_below="@id/input_contrasena"
+        android:layout_alignStart="@id/input_contrasena"
+        android:layout_alignEnd="@id/input_contrasena"
+        />
 
-            >
+    </RelativeLayout>
 
-        </Button>
-
-
-    </LinearLayout>
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
