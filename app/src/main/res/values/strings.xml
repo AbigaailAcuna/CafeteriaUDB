@@ -11,6 +11,7 @@
     <string name="texto_olvidaste_contrasena">¿Olvidaste tu contraseña? Haz click aquí</string>
     <string name="TituloPlatillo">Nombre del platillo:</string>
     <string name="DescripcionPlatillo">Descripcion del platillo:</string>
+    <string name="CategoriaPlatillo">Categoria:</string>
     <string name="DiaPlatillo">Dia Disponible:</string>
     <string name="PrecioPlatillo">Precio del platillo:</string>
     <string name="ImagenPlatillo">Imagen del platillo:</string>
